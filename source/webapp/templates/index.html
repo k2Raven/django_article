@@ -1,0 +1,31 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>Hello</h1>
+<h3>{{ articles }}</h3>
+{#<img src="{% static 'img/1552932077_1.jpg' %}" alt="">#}
+{% for article in articles %}
+    <div>
+    <h4>{{ article.title }}</h4>
+    <p>{{ article.content }}</p>
+        <a href="#">{{ article.author }}</a>
+    </div>
+
+{% endfor %}
+
+{% if 2 == 0 %} <p>qwe</p> {% elif 4 != 0 %} <p>asd</p>{% else %} <p>zxc</p>{% endif %}
+
+<select name="select" id="">
+    <option value="test1">test1</option>
+    <option value="test2">test2</option>
+    <option value="test3">test3</option>
+</select>
+
+</body>
+</html>
