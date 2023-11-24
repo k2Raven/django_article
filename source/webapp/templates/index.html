@@ -1,31 +1,31 @@
 {% load static %}
-
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Articles</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
 </head>
 <body>
-<h1>Hello</h1>
-<h3>{{ articles }}</h3>
-{#<img src="{% static 'img/1552932077_1.jpg' %}" alt="">#}
-{% for article in articles %}
-    <div>
-    <h4>{{ article.title }}</h4>
-    <p>{{ article.content }}</p>
-        <a href="#">{{ article.author }}</a>
-    </div>
+    <h1>Articles</h1>
 
-{% endfor %}
+    <a href="articles/add/" class="card-link">Создать статью</a>
+    {% for article in articles %}
+        <div class="card my-3" style="width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title">{{ article.title }}</h5>
+                <h6 class="card-subtitle mb-2 text-body-secondary">{{ article.author }}</h6>
+                <p class="card-text">{{ article.content }}</p>
+                <a href="article/?id={{ article.pk }}" class="card-link">Подробнее...</a>
+            </div>
+        </div>
 
-{% if 2 == 0 %} <p>qwe</p> {% elif 4 != 0 %} <p>asd</p>{% else %} <p>zxc</p>{% endif %}
+    {% endfor %}
 
-<select name="select" id="">
-    <option value="test1">test1</option>
-    <option value="test2">test2</option>
-    <option value="test3">test3</option>
-</select>
-
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
 </body>
 </html>
