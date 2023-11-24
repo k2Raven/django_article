@@ -1,7 +1,10 @@
 from django.db import models
 
+status_choices = [('new', 'Новая'), ('in_progress', 'В процессе'), ('done', 'Сделано')]
+
 
 class Article(models.Model):
+    # title = models.CharField(max_length=50, null=False, blank=False, verbose_name="Заголовок", choices=status_choices)
     title = models.CharField(max_length=50, null=False, blank=False, verbose_name="Заголовок")
     content = models.TextField(max_length=3000, null=False, blank=False, verbose_name='Контент')
     author = models.CharField(max_length=40, default='Неизвестный', verbose_name="Автор")

@@ -1,11 +1,11 @@
 from django.shortcuts import render
-from webapp.models import Article
+from webapp.models import Article, status_choices
 from django.http import HttpResponseRedirect
 
 
 def index_view(request):
     articles = Article.objects.all()
-    return render(request, 'index.html', {'articles': articles})
+    return render(request, 'index.html', {'articles': articles, 'status_choices': status_choices})
 
 
 def article_view(request):

@@ -10,6 +10,12 @@
 </head>
 <body>
     <h1>Articles</h1>
+    <select name="status" id="">
+        {% for status_choice in status_choices %}
+            <option value="{{ status_choice.0 }}">{{ status_choice.1 }}</option>
+        {% endfor %}
+
+    </select>
 
     <a href="articles/add/" class="card-link">Создать статью</a>
     {% for article in articles %}
