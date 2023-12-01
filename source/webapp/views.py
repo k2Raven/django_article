@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, reverse, redirect
-from webapp.models import Article
+from webapp.models import Article, TypeArticle
 from django.http import HttpResponseRedirect, HttpResponseNotFound, Http404
 
 
@@ -24,12 +24,14 @@ def article_view(request, *args, pk, **kwargs):
 
 def article_create_view(request):
     if request.method == "GET":
-        return render(request, 'article_create.html')
+        types_article = TypeArticle.objects.all()
+        return render(request, 'article_create.html', {'types_article': types_article})
     elif request.method == "POST":
         article = Article.objects.create(
             title=request.POST.get('title'),
             content=request.POST.get('content'),
-            author=request.POST.get('author')
+            author=request.POST.get('author'),
+            type_id=request.POST.get('type_id')
         )
         # url = reverse('article_view', kwargs={'pk': article.pk})
         # print(url)

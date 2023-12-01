@@ -18,6 +18,14 @@
     <label>Author:</label><br/>
     <input type="text" name="author"/><br/>
     <br/>
+    <select name="type_id" id="">
+        {% for type_article in types_article %}
+            <option value="{{ type_article.id }}">{{ type_article.title }}</option>
+        {% endfor %}
+
+    </select>
+
+    <br/>
     <input type="submit" value="Send"/>
 </form>
 
