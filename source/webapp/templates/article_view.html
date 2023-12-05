@@ -1,11 +1,13 @@
 {% extends 'base.html' %}
-{#{% load static %}#}
 
 {% block title %}{{ article.title }}{% endblock %}
-{% block menu %}<a class="nav-link" aria-current="page"  href="{% url 'index' %}">На главную</a>{% endblock %}
+{% block menu %}
+    <a class="nav-link" aria-current="page"  href="{% url 'index' %}">На главную</a>
+    <a class="nav-link" aria-current="page"  href="{% url 'article_update_view' pk=article.pk %}">Редактировать</a>
+    <a class="nav-link" aria-current="page"  href="{% url 'article_delete_view' pk=article.pk %}">Удалить</a>
+{% endblock %}
 
 {% block content %}
-{#    <img src="{% static 'img/1552932077_1.jpg' %}" alt="">#}
     <h1>Article</h1>
         <div class="card" >
             <div class="card-body">

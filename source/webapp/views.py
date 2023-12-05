@@ -31,7 +31,27 @@ def article_create_view(request):
             content=request.POST.get('content'),
             author=request.POST.get('author')
         )
-        # url = reverse('article_view', kwargs={'pk': article.pk})
-        # print(url)
-        # return HttpResponseRedirect(url)
         return redirect('article_view', pk=article.pk)
+
+
+def article_update_view(request, pk):
+    article = get_object_or_404(Article, pk=pk)
+    if request.method == "GET":
+        return render(request, 'article_update.html', {'article': article})
+    elif request.method == "POST":
+
+        article.title = request.POST.get('title')
+        article.content = request.POST.get('content')
+        article.author = request.POST.get('author')
+        article.save()
+
+        return redirect('article_view', pk=article.pk)
+
+
+def article_delete_view(request, pk):
+    article = get_object_or_404(Article, pk=pk)
+    if request.method == "GET":
+        return render(request, 'article_delete.html', {'article': article})
+    elif request.method == 'POST':
+        article.delete()
+        return redirect('index')
