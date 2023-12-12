@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from webapp.models import Article
 from webapp.forms import ArticleForm
-from django.views.generic import View, TemplateView, RedirectView
+from django.views.generic import View, TemplateView
 
 
 class IndexView(View):
@@ -10,9 +10,13 @@ class IndexView(View):
         return render(request, 'index.html', {'articles': articles})
 
 
-def article_view(request, *args, pk, **kwargs):
-    article = get_object_or_404(Article, pk=pk)
-    return render(request, 'article_view.html', {'article': article})
+class ArticleView(TemplateView):
+    template_name = 'article_view.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['article'] = get_object_or_404(Article, pk=kwargs.get('pk'))
+        return context
 
 
 def article_create_view(request):
