@@ -1,12 +1,13 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from webapp.models import Article
-from webapp.validate_char_field import article_validate
 from webapp.forms import ArticleForm
+from django.views.generic import View, TemplateView, RedirectView
 
 
-def index_view(request):
-    articles = Article.objects.all()
-    return render(request, 'index.html', {'articles': articles})
+class IndexView(View):
+    def get(self, request, *args, **kwargs):
+        articles = Article.objects.all()
+        return render(request, 'index.html', {'articles': articles})
 
 
 def article_view(request, *args, pk, **kwargs):
