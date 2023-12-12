@@ -19,50 +19,63 @@ class ArticleView(TemplateView):
         return context
 
 
-def article_create_view(request):
-    if request.method == "GET":
+class ArticleCreateView(View):
+    def get(self, request, *args, **kwargs):
         form = ArticleForm()
         return render(request, 'article_create.html', {'form': form})
-    elif request.method == "POST":
+
+    def post(self, request, *args, **kwargs):
         form = ArticleForm(data=request.POST)
 
         if form.is_valid():
+            tags = form.cleaned_data.pop('tags')
             article = Article.objects.create(
                 title=form.cleaned_data.get('title'),
                 content=form.cleaned_data.get('content'),
-                author=form.cleaned_data.get('author')
+                author=form.cleaned_data.get('author'),
             )
+            article.tags.set(tags)
             return redirect('article_view', pk=article.pk)
         else:
             return render(request, 'article_create.html', {'form': form})
 
 
-def article_update_view(request, pk):
-    article = get_object_or_404(Article, pk=pk)
-    if request.method == "GET":
+class ArticleUpdateView(TemplateView):
+    template_name = 'article_update.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        article = get_object_or_404(Article, pk=kwargs.get('pk'))
         form = ArticleForm(initial={
             'title': article.title,
             'content': article.content,
-            'author': article.author
+            'author': article.author,
+            'tags': article.tags.all()
         })
-        return render(request, 'article_update.html', {'form': form})
-    elif request.method == "POST":
+        context['form'] = form
+        return context
 
+    def post(self, request, *args, **kwargs):
+        article = get_object_or_404(Article, pk=kwargs.get('pk'))
         form = ArticleForm(data=request.POST)
         if form.is_valid():
+            tags = form.cleaned_data.pop('tags')
             article.title = form.cleaned_data.get('title')
             article.content = form.cleaned_data.get('content')
             article.author = form.cleaned_data.get('author')
+            article.tags.set(tags)
             article.save()
             return redirect('article_view', pk=article.pk)
         else:
             return render(request, 'article_update.html', {'form': form})
 
 
-def article_delete_view(request, pk):
-    article = get_object_or_404(Article, pk=pk)
-    if request.method == "GET":
+class ArticleDeleteView(View):
+    def get(self, request, *args, **kwargs):
+        article = get_object_or_404(Article, pk=kwargs.get('pk'))
         return render(request, 'article_delete.html', {'article': article})
-    elif request.method == 'POST':
+
+    def post(self, request, *args, **kwargs):
+        article = get_object_or_404(Article, pk=kwargs.get('pk'))
         article.delete()
         return redirect('index')
