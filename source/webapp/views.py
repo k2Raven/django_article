@@ -24,19 +24,9 @@ class ArticleView(TemplateView):
 class ArticleCreateView(FormView):
     template_name = 'article_create.html'
     form_class = ArticleForm
-    # success_url = reverse_lazy('index')
-
-    # def get_success_url(self):
-    #     return reverse('article_view', kwargs={'pk': self.article.pk})
 
     def form_valid(self, form):
-        tags = form.cleaned_data.pop('tags')
-        self.article = Article.objects.create(
-            title=form.cleaned_data.get('title'),
-            content=form.cleaned_data.get('content'),
-            author=form.cleaned_data.get('author'),
-        )
-        self.article.tags.set(tags)
+        self.article = form.save()
         return redirect('article_view', pk=self.article.pk)
 
 
@@ -51,29 +41,13 @@ class ArticleUpdateView(FormView):
     def get_object(self):
         return get_object_or_404(Article, pk=self.kwargs.get('pk'))
 
-    def get_initial(self):
-        # initial = {
-        #     'title': self.article.title,
-        #     'content': self.article.content,
-        #     'author': self.article.author,
-        #     'tags': self.article.tags.all()
-        # }
-        initial = {}
-
-        for key in 'title', 'content', 'author':
-            initial[key] = getattr(self.article, key)
-
-        initial['tags'] = self.article.tags.all()
-
-        return initial
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['instance'] = self.article
+        return kwargs
 
     def form_valid(self, form):
-        tags = form.cleaned_data.pop('tags')
-        self.article.title = form.cleaned_data.get('title')
-        self.article.content = form.cleaned_data.get('content')
-        self.article.author = form.cleaned_data.get('author')
-        self.article.tags.set(tags)
-        self.article.save()
+        form.save()
         return redirect('article_view', pk=self.article.pk)
 
 
