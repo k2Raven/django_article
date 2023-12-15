@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.validators import MinLengthValidator
 
 
 class AbstractModel(models.Model):
@@ -10,7 +11,7 @@ class AbstractModel(models.Model):
 
 
 class Article(AbstractModel):
-    title = models.CharField(max_length=50, null=False, blank=False, verbose_name="Заголовок")
+    title = models.CharField(max_length=50, null=False, blank=False, validators=[MinLengthValidator(4),], verbose_name="Заголовок")
     content = models.TextField(max_length=3000, null=False, blank=False, verbose_name='Контент')
     author = models.CharField(max_length=40, default='Неизвестный', verbose_name="Автор")
     tags = models.ManyToManyField('webapp.Tag', blank=True, related_name='articles', verbose_name='Теги')
