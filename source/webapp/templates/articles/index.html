@@ -5,6 +5,13 @@
 
 {% block content %}
     <h1>Articles</h1>
+    <div>
+        {% include 'partial/simple_search.html' %}
+    </div>
+    
+    {% if is_paginated %}
+    	{% include 'partial/pagination.html' %}
+    {% endif %} 
 
     <div class="row row-cols-3">
 
@@ -25,6 +32,8 @@
                     </div>
                 </div>
             </div>
+            {% empty %}
+            <p>Нет статей</p>
 
         {% endfor %}
     </div>

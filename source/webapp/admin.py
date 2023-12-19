@@ -1,5 +1,5 @@
 from django.contrib import admin
-from webapp.models import Article
+from webapp.models import Article, Comment
 
 
 @admin.register(Article)
@@ -10,3 +10,6 @@ class ArticleAdmin(admin.ModelAdmin):
     search_fields = ['title', 'content']
     fields = ['title', 'author', 'content', 'created_at', 'updated_at']
     readonly_fields = ['created_at', 'updated_at']
+
+
+admin.site.register(Comment)
