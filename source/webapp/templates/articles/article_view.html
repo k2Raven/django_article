@@ -5,6 +5,7 @@
     <a class="nav-link" aria-current="page" href="{% url 'index' %}">На главную</a>
     <a class="nav-link" aria-current="page" href="{% url 'article_update_view' pk=article.pk %}">Редактировать</a>
     <a class="nav-link" aria-current="page" href="{% url 'article_delete_view' pk=article.pk %}">Удалить</a>
+    <a class="nav-link" aria-current="page" href="{% url 'comment_add' pk=article.pk %}">Добавить комментарий</a>
 {% endblock %}
 
 {% block content %}
@@ -31,6 +32,8 @@
                         <h5 class="card-title">Автор: {{ comment.author }}</h5>
                         <p class="card-text">{{ comment.text }}</p>
                         <p>{{ article.created_at }}</p>
+                        <a href="{% url 'comment_update_view' pk=comment.pk %}" class="card-link">Редактировать</a>
+                        <a href="{% url 'comment_delete_view' pk=comment.pk %}" class="card-link">Удалить</a>
                     </div>
                 </div>
             </div>

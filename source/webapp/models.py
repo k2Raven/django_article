@@ -1,5 +1,6 @@
 from django.db import models
 from django.core.validators import MinLengthValidator
+from django.urls import reverse
 
 
 class AbstractModel(models.Model):
@@ -19,6 +20,8 @@ class Article(AbstractModel):
     def __str__(self):
         return f'{self.id}. {self.title}'
 
+    def get_absolute_url(self):
+        return reverse('article_view', kwargs={'pk': self.pk})
 
 class Comment(AbstractModel):
     article = models.ForeignKey('webapp.Article', related_name='comments', on_delete=models.CASCADE,

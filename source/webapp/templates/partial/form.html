@@ -1,3 +1,5 @@
+<form action="{{ action_url }}" method="{{ form_method }}">
+
 {% csrf_token %}
 {% for error in form.non_field_errors %}
 
@@ -20,3 +22,4 @@
 
 
 <input type="submit" value="{{ value_submit }}"/>
+</form>

@@ -5,9 +5,7 @@
 
 {% block content %}
 <h1>Create Article</h1>
-
-<form action="" method="post">
-    {% include 'partial/form.html' with value_submit='Create'  %}
-</form>
+    
+    {% include 'partial/form.html' with value_submit='Create' form_method='post'  %}
 
 {% endblock %}

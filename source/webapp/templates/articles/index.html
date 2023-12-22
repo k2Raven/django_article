@@ -26,7 +26,7 @@
                             {{ tag.name }}{% if forloop.last %}.{% else %}, {% endif %}
                         {% endfor %}
                         </p>
-                        <a href="{% url 'article_view' pk=article.pk %}" class="card-link">Подробнее...</a>
+                        <a href="{{ article.get_absolute_url }}" class="card-link">Подробнее...</a>
                         <a href="{% url 'article_update_view' pk=article.pk %}" class="card-link">Редактировать</a>
                         <a href="{% url 'article_delete_view' pk=article.pk %}" class="card-link">Удалить</a>
                     </div>

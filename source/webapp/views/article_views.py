@@ -5,7 +5,7 @@ from django.utils.http import urlencode
 from django.db.models import Q
 from webapp.models import Article
 from webapp.forms import ArticleForm, SimpleSearchForm
-from django.views.generic import View, TemplateView, FormView, ListView, DetailView
+from django.views.generic import View, FormView, ListView, DetailView, CreateView, UpdateView, DeleteView
 
 
 class IndexView(ListView):
@@ -55,42 +55,51 @@ class ArticleView(DetailView):
         return context
 
 
-class ArticleCreateView(FormView):
+class ArticleCreateView(CreateView):
     template_name = 'articles/article_create.html'
+    model = Article
+    # fields = ['title', 'content', 'author', 'tags']
     form_class = ArticleForm
 
-    def form_valid(self, form):
-        self.article = form.save()
-        return redirect('article_view', pk=self.article.pk)
+    # def form_valid(self, form):
+    #     self.article = form.save()
+    #     return redirect('article_view', pk=self.article.pk)
+
+    # def get_success_url(self):
+    #     return reverse('article_view', kwargs={'pk': self.object.pk})
 
 
-class ArticleUpdateView(FormView):
+class ArticleUpdateView(UpdateView):
     template_name = 'articles/article_update.html'
+    model = Article
     form_class = ArticleForm
 
-    def dispatch(self, request, *args, **kwargs):
-        self.article = self.get_object()
-        return super().dispatch(request, *args, **kwargs)
+    # def dispatch(self, request, *args, **kwargs):
+    #     self.article = self.get_object()
+    #     return super().dispatch(request, *args, **kwargs)
 
-    def get_object(self):
-        return get_object_or_404(Article, pk=self.kwargs.get('pk'))
+    # def get_object(self):
+    #     return get_object_or_404(Article, pk=self.kwargs.get('pk'))
 
-    def get_form_kwargs(self):
-        kwargs = super().get_form_kwargs()
-        kwargs['instance'] = self.article
-        return kwargs
+    # def get_form_kwargs(self):
+    #     kwargs = super().get_form_kwargs()
+    #     kwargs['instance'] = self.article
+    #     return kwargs
 
-    def form_valid(self, form):
-        form.save()
-        return redirect('article_view', pk=self.article.pk)
+    # def form_valid(self, form):
+    #     form.save()
+    #     return redirect('article_view', pk=self.article.pk)
 
 
-class ArticleDeleteView(View):
-    def get(self, request, *args, **kwargs):
-        article = get_object_or_404(Article, pk=kwargs.get('pk'))
-        return render(request, 'articles/article_delete.html', {'article': article})
-
-    def post(self, request, *args, **kwargs):
-        article = get_object_or_404(Article, pk=kwargs.get('pk'))
-        article.delete()
-        return redirect('index')
+class ArticleDeleteView(DeleteView):
+    template_name = 'articles/article_delete.html'
+    model = Article
+    success_url = reverse_lazy('index')
+    # def get(self, request, *args, **kwargs):
+    #     article = get_object_or_404(Article, pk=kwargs.get('pk'))
+    #     return render(request, 'articles/article_delete.html', {'article': article})
+    #
+    # def post(self, request, *args, **kwargs):
+    #     article = get_object_or_404(Article, pk=kwargs.get('pk'))
+    #     article.delete()
+    #     return redirect('index')

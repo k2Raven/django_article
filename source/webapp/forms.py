@@ -1,5 +1,5 @@
 from django import forms
-from webapp.models import Article
+from webapp.models import Article, Comment
 
 
 class ArticleForm(forms.ModelForm):
@@ -21,6 +21,12 @@ class ArticleForm(forms.ModelForm):
         if title == content:
             raise forms.ValidationError('Заголовок и Контент не могут быть одинаковые')
         return cleaned_data
+
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ('text', 'author')
 
 
 class SimpleSearchForm(forms.Form):
