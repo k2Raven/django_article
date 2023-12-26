@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse, reverse_lazy
 from django.utils.http import urlencode
@@ -25,6 +26,7 @@ class IndexView(ListView):
         return None
 
     def dispatch(self, request, *args, **kwargs):
+        print(request.user)
         self.search_form = self.get_search_form()
         self.search_value = self.get_search_value()
         return super().dispatch(request, *args, **kwargs)
@@ -55,7 +57,7 @@ class ArticleView(DetailView):
         return context
 
 
-class ArticleCreateView(CreateView):
+class ArticleCreateView(LoginRequiredMixin, CreateView):
     template_name = 'articles/article_create.html'
     model = Article
     # fields = ['title', 'content', 'author', 'tags']
@@ -63,10 +65,10 @@ class ArticleCreateView(CreateView):
 
     # def form_valid(self, form):
     #     self.article = form.save()
-    #     return redirect('article_view', pk=self.article.pk)
+    #     return redirect('webapp:article_view', pk=self.article.pk)
 
     # def get_success_url(self):
-    #     return reverse('article_view', kwargs={'pk': self.object.pk})
+    #     return reverse('webapp:article_view', kwargs={'pk': self.object.pk})
 
 
 class ArticleUpdateView(UpdateView):
@@ -88,13 +90,13 @@ class ArticleUpdateView(UpdateView):
 
     # def form_valid(self, form):
     #     form.save()
-    #     return redirect('article_view', pk=self.article.pk)
+    #     return redirect('webapp:article_view', pk=self.article.pk)
 
 
 class ArticleDeleteView(DeleteView):
     template_name = 'articles/article_delete.html'
     model = Article
-    success_url = reverse_lazy('index')
+    success_url = reverse_lazy('webapp:index')
     # def get(self, request, *args, **kwargs):
     #     article = get_object_or_404(Article, pk=kwargs.get('pk'))
     #     return render(request, 'articles/article_delete.html', {'article': article})
@@ -102,4 +104,4 @@ class ArticleDeleteView(DeleteView):
     # def post(self, request, *args, **kwargs):
     #     article = get_object_or_404(Article, pk=kwargs.get('pk'))
     #     article.delete()
-    #     return redirect('index')
+    #     return redirect('webapp:index')

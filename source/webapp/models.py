@@ -21,7 +21,7 @@ class Article(AbstractModel):
         return f'{self.id}. {self.title}'
 
     def get_absolute_url(self):
-        return reverse('article_view', kwargs={'pk': self.pk})
+        return reverse('webapp:article_view', kwargs={'pk': self.pk})
 
 class Comment(AbstractModel):
     article = models.ForeignKey('webapp.Article', related_name='comments', on_delete=models.CASCADE,
