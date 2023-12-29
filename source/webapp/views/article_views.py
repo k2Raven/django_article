@@ -1,4 +1,4 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin, UserPassesTestMixin
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse, reverse_lazy
 from django.utils.http import urlencode
@@ -63,18 +63,25 @@ class ArticleCreateView(LoginRequiredMixin, CreateView):
     # fields = ['title', 'content', 'author', 'tags']
     form_class = ArticleForm
 
-    # def form_valid(self, form):
-    #     self.article = form.save()
-    #     return redirect('webapp:article_view', pk=self.article.pk)
+    def form_valid(self, form):
+        self.article = form.save(commit=False)
+        self.article.author = self.request.user
+        self.article.save()
+        form.save_m2m()
+        return redirect('webapp:article_view', pk=self.article.pk)
 
     # def get_success_url(self):
     #     return reverse('webapp:article_view', kwargs={'pk': self.object.pk})
 
 
-class ArticleUpdateView(UpdateView):
+class ArticleUpdateView(PermissionRequiredMixin, UpdateView):
     template_name = 'articles/article_update.html'
     model = Article
     form_class = ArticleForm
+    permission_required = 'webapp.change_article'
+
+    def has_permission(self):
+        return super().has_permission() or self.request.user == self.get_object().author
 
     # def dispatch(self, request, *args, **kwargs):
     #     self.article = self.get_object()
@@ -93,10 +100,13 @@ class ArticleUpdateView(UpdateView):
     #     return redirect('webapp:article_view', pk=self.article.pk)
 
 
-class ArticleDeleteView(DeleteView):
+class ArticleDeleteView(UserPassesTestMixin, DeleteView):
     template_name = 'articles/article_delete.html'
     model = Article
     success_url = reverse_lazy('webapp:index')
+
+    def test_func(self):
+        return self.request.user.has_perm('webapp.delete_article') or self.request.user == self.get_object().author
     # def get(self, request, *args, **kwargs):
     #     article = get_object_or_404(Article, pk=kwargs.get('pk'))
     #     return render(request, 'articles/article_delete.html', {'article': article})

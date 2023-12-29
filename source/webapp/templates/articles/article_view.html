@@ -3,9 +3,17 @@
 {% block title %}{{ article.title }}{% endblock %}
 {% block menu %}
     <a class="nav-link" aria-current="page" href="{% url 'webapp:index' %}">На главную</a>
-    <a class="nav-link" aria-current="page" href="{% url 'webapp:article_update_view' pk=article.pk %}">Редактировать</a>
-    <a class="nav-link" aria-current="page" href="{% url 'webapp:article_delete_view' pk=article.pk %}">Удалить</a>
-    <a class="nav-link" aria-current="page" href="{% url 'webapp:comment_add' pk=article.pk %}">Добавить комментарий</a>
+    {% if perms.webapp.change_article or article.author == request.user %}
+        <a class="nav-link" aria-current="page" href="{% url 'webapp:article_update_view' pk=article.pk %}">Редактировать</a>
+    {% endif %}
+    {% if perms.webapp.delete_article or article.author == request.user %}
+        <a class="nav-link" aria-current="page" href="{% url 'webapp:article_delete_view' pk=article.pk %}">Удалить</a>
+    {% endif %}
+
+    {% if request.user.is_authenticated %}
+        <a class="nav-link" aria-current="page" href="{% url 'webapp:comment_add' pk=article.pk %}">Добавить
+            комментарий</a>
+    {% endif %}
 {% endblock %}
 
 {% block content %}
@@ -32,8 +40,14 @@
                         <h5 class="card-title">Автор: {{ comment.author }}</h5>
                         <p class="card-text">{{ comment.text }}</p>
                         <p>{{ article.created_at }}</p>
-                        <a href="{% url 'webapp:comment_update_view' pk=comment.pk %}" class="card-link">Редактировать</a>
-                        <a href="{% url 'webapp:comment_delete_view' pk=comment.pk %}" class="card-link">Удалить</a>
+
+                        {% if perms.webapp.change_comment or comment.author == request.user %}
+                            <a href="{% url 'webapp:comment_update_view' pk=comment.pk %}"
+                               class="card-link">Редактировать</a>
+                        {% endif %}
+                        {% if perms.webapp.delete_comment or comment.author == request.user %}
+                            <a href="{% url 'webapp:comment_delete_view' pk=comment.pk %}" class="card-link">Удалить</a>
+                        {% endif %}
                     </div>
                 </div>
             </div>

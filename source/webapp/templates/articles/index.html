@@ -30,8 +30,13 @@
                         {% endfor %}
                         </p>
                         <a href="{{ article.get_absolute_url }}" class="card-link">Подробнее...</a>
+                    {% if perms.webapp.change_article or article.author == request.user %}
                         <a href="{% url 'webapp:article_update_view' pk=article.pk %}" class="card-link">Редактировать</a>
+                    {% endif %}
+                    
+                    {% if perms.webapp.delete_article or article.author == request.user %}
                         <a href="{% url 'webapp:article_delete_view' pk=article.pk %}" class="card-link">Удалить</a>
+                    {% endif %}
                     </div>
                 </div>
             </div>

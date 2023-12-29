@@ -5,7 +5,7 @@ from webapp.models import Article, Comment
 class ArticleForm(forms.ModelForm):
     class Meta:
         model = Article
-        fields = ('title', 'content', 'tags', 'author')
+        fields = ('title', 'content', 'tags', )
         widgets = {'tags': forms.CheckboxSelectMultiple}
         error_messages = {
             'title': {
@@ -26,7 +26,7 @@ class ArticleForm(forms.ModelForm):
 class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
-        fields = ('text', 'author')
+        fields = ('text', )
 
 
 class SimpleSearchForm(forms.Form):
