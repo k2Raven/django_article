@@ -28,7 +28,7 @@
                     <a class="text-success-emphasis text-decoration-none" aria-current="page" 
                        href="{% url 'accounts:login' %}?next={{ request.get_full_path }}">Вход</a>
                 {% else %}
-                    <span class="text-success me-3">{{ request.user }}</span>
+                    <a href="{% url 'accounts:user_detail' request.user.id %}" class="text-success me-3">{{ request.user }}</a>
 
                     <a class="text-success-emphasis text-decoration-none" aria-current="page" 
                        href="{% url 'accounts:logout' %}?next={{ request.get_full_path }}">Выход</a>
