@@ -15,6 +15,26 @@ class TestView(View):
         return JsonResponse([{'id': 1, 'name': 'test'}, {'id': 2, 'name': 'test2'}], safe=False)
 
 
+class LikeArticleView(LoginRequiredMixin, View):
+    # def get(self, request, pk, *args, **kwargs):
+    #     article = get_object_or_404(Article, pk=pk)
+    #     if request.user in article.likes.all():
+    #         article.likes.remove(request.user)
+    #     else:
+    #         article.likes.add(request.user)
+    #     return JsonResponse({'count': article.likes.count()}, safe=False)
+
+    def post(self, request, pk, *args, **kwargs):
+        article = get_object_or_404(Article, pk=pk)
+        article.likes.add(request.user)
+        return JsonResponse({'count': article.likes.count()}, safe=False)
+
+    def delete(self, request, pk, *args, **kwargs):
+        article = get_object_or_404(Article, pk=pk)
+        article.likes.remove(request.user)
+        return JsonResponse({'count': article.likes.count()}, safe=False)
+
+
 class IndexView(ListView):
     model = Article
     template_name = 'articles/index.html'
