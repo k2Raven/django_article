@@ -7,6 +7,8 @@ from rest_framework.viewsets import ModelViewSet
 from api_v3.serializers import ArticleModelSerializer
 from rest_framework.permissions import IsAuthenticated, SAFE_METHODS
 
+from api_v3.permissions import IsAuthorPermission
+
 from webapp.models import Article
 
 
@@ -19,12 +21,15 @@ class ArticleModelVIewSet(ModelViewSet):
     def get_permissions(self):
         # if self.request.method == 'GET':
         # if self.action in ('list', 'retrieve', 'get_comments_count', 'get_article_comments_count'):
-        if self.request.method in SAFE_METHODS:
-            return []
-        return [IsAuthenticated()]
+        # if self.request.method in SAFE_METHODS:
+        #     return []
+        return [IsAuthorPermission()]
 
     # def list(self, request, *args, **kwargs):
     #     return Response({'test': 'test1'})
+
+    # def perform_create(self, serializer):
+    #     serializer.save(author=self.request.user)
 
     @action(methods=["GET"], detail=False, url_path="comments-count")
     def get_comments_count(self, request, *args, **kwargs):

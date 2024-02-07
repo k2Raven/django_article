@@ -30,9 +30,14 @@ class ArticleModelSerializer(serializers.ModelSerializer):
     class Meta:
         model = Article
         fields = ['id', 'title', 'content', 'author', 'tags', 'comments', 'created_at', 'updated_at']
-        read_only_fields = ['comments']
+        read_only_fields = ['comments', 'author']
 
     def validate_title(self, title):
         if len(title) < 10:
             raise ValidationError("Title must be at least 8 characters")
         return title
+
+    def create(self, validated_data):
+        request = self.context.get('request')
+        validated_data['author'] = request.user
+        return super().create(validated_data)
