@@ -18,6 +18,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
+from django.conf.urls.i18n import i18n_patterns
 
 urls_api = [
     path('v1/', include('api_v1.urls')),
@@ -25,10 +26,11 @@ urls_api = [
     path('v3/', include('api_v3.urls'))
 ]
 
+urlpatterns = [path('api/', include(urls_api))]
 
-urlpatterns = [
+
+urlpatterns += i18n_patterns(
     path('admin/', admin.site.urls),
     path('', include('webapp.urls')),
     path('accounts/', include('accounts.urls')),
-    path('api/', include(urls_api))
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -1,5 +1,6 @@
 from django import forms
 from webapp.models import Article, Comment
+from django.utils.translation import gettext_lazy as _
 
 
 class ArticleForm(forms.ModelForm):
@@ -9,8 +10,8 @@ class ArticleForm(forms.ModelForm):
         widgets = {'tags': forms.CheckboxSelectMultiple}
         error_messages = {
             'title': {
-                'required': 'Please enter',
-                'min_length': 'Заголовок слишком короткий'
+                'required': _('Please enter'),
+                'min_length': _('Заголовок слишком короткий')
             }
         }
 
@@ -19,7 +20,7 @@ class ArticleForm(forms.ModelForm):
         title = cleaned_data.get('title')
         content = cleaned_data.get('content')
         if title == content:
-            raise forms.ValidationError('Заголовок и Контент не могут быть одинаковые')
+            raise forms.ValidationError(_('Заголовок и Контент не могут быть одинаковые'))
         return cleaned_data
 
 
@@ -30,4 +31,4 @@ class CommentForm(forms.ModelForm):
 
 
 class SimpleSearchForm(forms.Form):
-    search = forms.CharField(max_length=100, required=False, label='Найти')
+    search = forms.CharField(max_length=100, required=False, label=_('Найти'))

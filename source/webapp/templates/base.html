@@ -1,4 +1,5 @@
 {% load static %}
+{% load i18n %}
 <!doctype html>
 <html lang="en">
 <head>
@@ -20,6 +21,26 @@
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav me-auto mb-2 mb-lg-0">
                 {% block menu %}{% endblock %}
+
+                {% get_current_language as LANGUAGE_CODE %}
+                {% get_available_languages as LANGUAGES %}
+                {% get_language_info_list for LANGUAGES as languages %}
+                {% get_language_info for LANGUAGE_CODE as current_language %}
+                <div class="dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                       aria-expanded="false">{{ current_language.name_local }}</a>
+
+                    <ul class="dropdown-menu">
+                        {% for language in languages %}
+                            <li><a class="dropdown-item {% if language.code == LANGUAGE_CODE %}active{% endif %}"
+                                   href="/{{ language.code }}{{ language_base_link }}">
+                                {{ language.name_local }} ({{ language.code }})
+                            </a></li>
+
+                        {% endfor %}
+
+                    </ul>
+                </div>
             </div>
             <div class="d-flex">
                 {% if not request.user.is_authenticated %}
@@ -57,7 +78,7 @@
 
         }
         let options;
-        
+
         if (method !== "GET") {
             options = {method, headers, body: JSON.stringify(data),};
         } else {
